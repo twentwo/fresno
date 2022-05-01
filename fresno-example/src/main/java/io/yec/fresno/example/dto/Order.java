@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Order
@@ -25,6 +26,6 @@ public class Order implements Serializable {
 
     private String title;
 
-//    private Date submitTime;
+    private LocalDateTime submitTime;
 
 }

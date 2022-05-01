@@ -34,7 +34,7 @@ public class FresnoApplication {
         for (int i = 0; i < 10; i++) {
             long current = System.currentTimeMillis();
             fooService.enQueueOrder(Order.createOrder(new Long(i) + current, "orderNo-" + (i + current),
-                    "title-" + (i + current)));
+                    "title-" + (i + current), LocalDateTime.now()));
         }
         stopWatch.stop();
         log.info("fooService.enQueueOrder finish {}", stopWatch.getTotalTimeMillis());

@@ -1,5 +1,7 @@
 package io.yec.fresno.spring.boot.autoconfigure.utils;
 
+import io.yec.fresno.spring.boot.autoconfigure.FresnoAutoConfiguration;
+
 import java.util.Set;
 
 /**
@@ -45,7 +47,8 @@ public class FresnoUtils {
     public static final String BASE_PACKAGES_BEAN_NAME = "fresno-event-handler-class-base-packages";
 
     /**
-     *
+     * The bean name of fresno ObjectMapper
+     * @see FresnoAutoConfiguration#fresnoObjectMapper()
      */
     public static final String FRESNO_OBJECT_MAPPER_NAME = "fresno-object-mapper";
 

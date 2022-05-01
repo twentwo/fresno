@@ -1,8 +1,6 @@
 package io.yec.fresno.core.task.proxy;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.yec.fresno.core.Event;
 import io.yec.fresno.core.queue.EventQueue;
 import io.yec.fresno.core.task.handler.EventListener;

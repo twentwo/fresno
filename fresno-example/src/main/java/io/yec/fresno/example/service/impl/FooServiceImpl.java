@@ -40,7 +40,7 @@ public class FooServiceImpl implements FooService {
 
     @Override
     public void enQueueOrder(Order order) {
-        log.info("提交任务Order :: {}", order);
+        log.info("enQueueOrder :: {}", order);
         orderEventQueue.enqueueToBack(order);
     }
 

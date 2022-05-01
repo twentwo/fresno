@@ -25,7 +25,7 @@ public class UserEventListener implements EventListener<User> {
 
     @Override
     public void onEvent(EventQueue<User> eventQueue, Event<User> event) {
-        log.info("开始处理-{}", event.getObj());
+        log.info("onEvent-{}", event.getObj());
         try {
             fooService.sayHello(event.getObj());
         } catch (Exception e) {
