@@ -1,5 +1,8 @@
 package io.yec.fresno.spring.boot.autoconfigure;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.dsl.Disruptor;
 import io.yec.fresno.core.queue.EventQueue;
@@ -29,7 +32,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.List;
 import java.util.Map;
@@ -56,14 +58,32 @@ import static io.yec.fresno.spring.support.config.EventHandlerAnnotationBeanPost
 @AutoConfigureAfter(RedisAutoConfiguration.class)
 public class FresnoAutoConfiguration {
 
+    @ConditionalOnMissingBean(name = FRESNO_OBJECT_MAPPER_NAME)
+    @ConditionalOnClass({ObjectMapper.class, JavaTimeModule.class})
+    @Bean(name = FRESNO_OBJECT_MAPPER_NAME)
+    public ObjectMapper fresnoObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper()
+                // support Java 8 DateTime
+                .registerModule(new JavaTimeModule())
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+        return objectMapper;
+    }
+
+
     @ConditionalOnMissingBean(name = FRESNO_REDIS_TEMPLATE_BEAN_NAME)
-    @ConditionalOnBean(RedisConnectionFactory.class)
+    @ConditionalOnBean(value = RedisConnectionFactory.class, name = FRESNO_OBJECT_MAPPER_NAME)
     @Bean(name = FRESNO_REDIS_TEMPLATE_BEAN_NAME)
-    public RedisTemplate fresnoRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate fresnoRedisTemplate(
+            RedisConnectionFactory redisConnectionFactory,
+            @Qualifier(FRESNO_OBJECT_MAPPER_NAME) ObjectMapper fresnoObjectMapper
+    ) {
         RedisTemplate redisTemplate = new RedisTemplate();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(RedisSerializer.string());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+        Jackson2JsonRedisSerializer<Object> objectJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        objectJackson2JsonRedisSerializer.setObjectMapper(fresnoObjectMapper);
+        redisTemplate.setValueSerializer(objectJackson2JsonRedisSerializer);
         return redisTemplate;
     }
 
@@ -111,8 +131,10 @@ public class FresnoAutoConfiguration {
     @ConditionalOnMissingBean(name = "onEventProxyCreator")
     @ConditionalOnBean(EventHandlerAnnotationBeanPostProcessor.class)
     @Bean
-    public OnEventProxyCreator onEventProxyCreator() {
-        return new OnEventProxyCreator(new OnEventProxyAdvice());
+    public OnEventProxyCreator onEventProxyCreator(@Qualifier(FRESNO_OBJECT_MAPPER_NAME) ObjectMapper fresnoObjectMapper) {
+        OnEventProxyAdvice onEventProxyAdvice = new OnEventProxyAdvice();
+        onEventProxyAdvice.setObjectMapper(fresnoObjectMapper);
+        return new OnEventProxyCreator(onEventProxyAdvice);
     }
 
     @ConditionalOnMissingBean(EventWorker.class)

@@ -44,4 +44,9 @@ public class FresnoUtils {
      */
     public static final String BASE_PACKAGES_BEAN_NAME = "fresno-event-handler-class-base-packages";
 
+    /**
+     *
+     */
+    public static final String FRESNO_OBJECT_MAPPER_NAME = "fresno-object-mapper";
+
 }

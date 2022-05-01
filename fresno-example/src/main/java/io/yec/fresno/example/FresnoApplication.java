@@ -15,6 +15,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.SimpleTransactionStatus;
 import org.springframework.util.StopWatch;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Slf4j
 @SpringBootApplication
 public class FresnoApplication {
@@ -24,11 +27,11 @@ public class FresnoApplication {
 
         FooService fooService = applicationContext.getBean(FooService.class);
 
-        fooService.putUser(User.createUser(1L, "yec", "123"));
+        fooService.putUser(User.createUser(1L, "yec", "123", new Date(), LocalDateTime.now()));
 
         StopWatch stopWatch = new StopWatch("fooService.enQueueOrder");
         stopWatch.start();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 10; i++) {
             long current = System.currentTimeMillis();
             fooService.enQueueOrder(Order.createOrder(new Long(i) + current, "orderNo-" + (i + current),
                     "title-" + (i + current)));

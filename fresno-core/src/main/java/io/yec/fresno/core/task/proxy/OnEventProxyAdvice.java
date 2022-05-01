@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.yec.fresno.core.Event;
 import io.yec.fresno.core.queue.EventQueue;
 import io.yec.fresno.core.task.handler.EventListener;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -23,11 +24,8 @@ import java.util.HashMap;
 @Slf4j
 public class OnEventProxyAdvice implements MethodInterceptor {
 
-    private static ObjectMapper objectMapper = new ObjectMapper()
-            // support Java 8 DateTime
-            .registerModule(new JavaTimeModule())
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+    @Setter
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
