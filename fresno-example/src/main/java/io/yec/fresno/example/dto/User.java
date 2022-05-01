@@ -2,6 +2,7 @@ package io.yec.fresno.example.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @create 2016/06/30 5:28 PM
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor(staticName = "createUser")
 public class User implements Serializable {
 

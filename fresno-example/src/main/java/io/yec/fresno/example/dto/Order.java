@@ -2,9 +2,9 @@ package io.yec.fresno.example.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Order
@@ -13,6 +13,7 @@ import java.util.Date;
  * @since 2022/04/30
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor(staticName = "createOrder")
 public class Order implements Serializable {
 

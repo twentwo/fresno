@@ -12,7 +12,4 @@ import io.yec.fresno.core.queue.EventQueue;
  */
 public interface EventListener<T> {
     void onEvent(EventQueue<T> eventQueue, Event<T> event);
-    default String queueName() {
-        return this.getClass().getSimpleName();
-    }
 }

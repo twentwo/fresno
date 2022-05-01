@@ -6,6 +6,8 @@ import io.yec.fresno.core.queue.EventQueue;
 import io.yec.fresno.core.task.EventHandlerBean;
 import io.yec.fresno.core.task.EventWorker;
 import io.yec.fresno.core.task.handler.EventListener;
+import io.yec.fresno.core.task.proxy.OnEventProxyAdvice;
+import io.yec.fresno.core.task.proxy.OnEventProxyCreator;
 import io.yec.fresno.spring.boot.autoconfigure.properties.FresnoConfigProperties;
 import io.yec.fresno.spring.boot.autoconfigure.properties.FresnoEventConfigProperties;
 import io.yec.fresno.spring.support.config.EventHandlerAnnotationBeanPostProcessor;
@@ -27,6 +29,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.List;
 import java.util.Map;
@@ -103,6 +106,13 @@ public class FresnoAutoConfiguration {
     @Bean(name = EventQueueReferenceAnnotationBeanPostProcessor.BEAN_NAME)
     public EventQueueReferenceAnnotationBeanPostProcessor eventQueueReferenceAnnotationBeanPostProcessor() {
         return new EventQueueReferenceAnnotationBeanPostProcessor();
+    }
+
+    @ConditionalOnMissingBean(name = "onEventProxyCreator")
+    @ConditionalOnBean(EventHandlerAnnotationBeanPostProcessor.class)
+    @Bean
+    public OnEventProxyCreator onEventProxyCreator() {
+        return new OnEventProxyCreator(new OnEventProxyAdvice());
     }
 
     @ConditionalOnMissingBean(EventWorker.class)

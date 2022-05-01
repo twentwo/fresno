@@ -15,8 +15,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.SimpleTransactionStatus;
 import org.springframework.util.StopWatch;
 
-import java.util.Date;
-
 @Slf4j
 @SpringBootApplication
 public class FresnoApplication {
@@ -30,13 +28,13 @@ public class FresnoApplication {
 
         StopWatch stopWatch = new StopWatch("fooService.enQueueOrder");
         stopWatch.start();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100000; i++) {
             long current = System.currentTimeMillis();
             fooService.enQueueOrder(Order.createOrder(new Long(i) + current, "orderNo-" + (i + current),
                     "title-" + (i + current)));
         }
         stopWatch.stop();
-        log.info("fooService.enQueueOrder finish {}", stopWatch);
+        log.info("fooService.enQueueOrder finish {}", stopWatch.getTotalTimeMillis());
 
     }
 
@@ -50,12 +48,12 @@ public class FresnoApplication {
 
             @Override
             public void commit(TransactionStatus status) throws TransactionException {
-                System.out.println("txManager : 事务提交...");
+                System.out.println("txManager : transaction commit...");
             }
 
             @Override
             public void rollback(TransactionStatus status) throws TransactionException {
-                System.out.println("txManager : 事务回滚...");
+                System.out.println("txManager : transaction rollback...");
             }
         };
     }
