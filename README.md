@@ -12,6 +12,8 @@ draw inspiration from https://github.com/zhangkaitao
 
 ## Usage
 
+spring-boot application support
+
 ### Maven
 
 ```xml
