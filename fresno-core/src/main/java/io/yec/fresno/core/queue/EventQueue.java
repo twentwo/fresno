@@ -153,7 +153,7 @@ public class EventQueue<T> {
      * @param obj
      */
     public void enqueueToBack(T obj) {
-        ENQUEUE_TO_LEFT_REDIS_SCRIPT.exec(queueRedis, Lists.newArrayList(queueName, bakQueueName), obj, 0);
+        ENQUEUE_TO_LEFT_REDIS_SCRIPT.exec(queueRedis, Lists.newArrayList(queueName, bakQueueName), obj, maxBakSize);
     }
 
     private String getFailCountName(T obj) {
