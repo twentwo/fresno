@@ -16,6 +16,8 @@ spring-boot application support
 
 ### Maven
 
+maven dependency import
+
 ```xml
 <dependency>
   <groupId>io.yec</groupId>
