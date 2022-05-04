@@ -24,3 +24,45 @@ spring-boot application support
 </dependency>
 ```
 
+### EventHandler
+
+define EventHandler
+
+```java
+@EventHandler
+public class OrderEventListener implements EventListener<Order> {
+
+    @Resource
+    private FooService fooService;
+
+    @Override
+    public void onEvent(EventQueue<Order> eventQueue, Event<Order> event) {
+        try {
+            fooService.getOrder(event.getObj());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+}
+```
+
+### EventQueueReference
+
+reference EventQueue
+
+```java
+@Service
+public class FooServiceImpl implements FooService {
+
+    @EventQueueReference(belongTo = OrderEventListener.class)
+    private EventQueue<Order> orderEventQueue;
+
+    @Override
+    public void enQueueOrder(Order order) {
+        log.info("enQueueOrder :: {}", order);
+        orderEventQueue.enqueueToBack(order);
+    }
+}
+```
+
