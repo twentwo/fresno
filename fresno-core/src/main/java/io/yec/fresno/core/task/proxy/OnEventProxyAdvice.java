@@ -32,7 +32,7 @@ public class OnEventProxyAdvice implements MethodInterceptor {
         Event event = (Event) args[1];
         Object obj = event.getObj();
         if (obj instanceof HashMap) {
-            Class<?> eventObjType  = (Class<?>) ResolvableType.forMethodParameter(targetMethod, 1).getGeneric(0).getType();
+            Class<?> eventObjType  = ResolvableType.forMethodParameter(targetMethod, 1).getGeneric(0).getRawClass();
             Object eventObj = objectMapper.convertValue(obj, eventObjType);
             event.setObj(eventObj);
         }

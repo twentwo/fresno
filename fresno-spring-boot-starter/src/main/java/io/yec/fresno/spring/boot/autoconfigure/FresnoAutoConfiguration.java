@@ -88,7 +88,7 @@ public class FresnoAutoConfiguration {
     }
 
     /**
-     * The bean is used to scan the packages of Dubbo Service classes
+     * The bean is used to scan the packages of Fresno Service classes
      *
      * @param environment {@link Environment} instance
      * @return non-null {@link Set}
